@@ -1,0 +1,57 @@
+/* Ваши цвета */
+:root {
+  --bg-200: #292e3b;
+  --bg-300: #414654;
+  --primary-200: #56647b;
+  --primary-300: #b4c2dc;
+  --accent-200: #ffecda;
+  --text-200: #e0e0e0;
+}
+
+/* Поддержка темной темы (опционально) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-200: #1a1e28;
+    --bg-300: #2d323f;
+    --primary-200: #3d4a63;
+    --primary-300: #8a9bbf;
+    --accent-200: #ffd8b2;
+    --text-200: #d0d0d0;
+  }
+}
+
+/* Базовые стили */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text-200);
+  background: var(--bg-200);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

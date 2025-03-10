@@ -1,0 +1,6 @@
+@import './base.css';
+
+#app {
+  background: var(--bg-200);
+}
+
