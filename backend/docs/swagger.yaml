@@ -28,6 +28,12 @@ definitions:
       message:
         type: string
     type: object
+  models.JoinRoomRequest:
+    properties:
+      password:
+        example: your_password
+        type: string
+    type: object
   models.Room:
     properties:
       created_at:
@@ -178,13 +184,123 @@ paths:
       summary: Получить комнату по ID
       tags:
       - rooms
+  /rooms/{id}/join:
+    post:
+      consumes:
+      - application/json
+      description: Позволяет пользователю войти в комнату по логину и паролю.
+      parameters:
+      - description: ID комнаты
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Данные для входа
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.JoinRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Room'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Войти в комнату
+      tags:
+      - rooms
+  /rooms/{id}/join-by-link:
+    post:
+      consumes:
+      - application/json
+      description: Позволяет пользователю войти в комнату по реферальной ссылке.
+      parameters:
+      - description: ID комнаты
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Room'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Войти в комнату по ссылке
+      tags:
+      - rooms
+  /rooms/{id}/leave:
+    post:
+      consumes:
+      - application/json
+      description: Позволяет пользователю выйти из комнаты.
+      parameters:
+      - description: ID комнаты
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Room'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Выйти из комнаты
+      tags:
+      - rooms
   /rooms/{room_id}/tracks:
     get:
-      description: Возвращает список треков в указанной комнате.
+      description: Возвращает список треков в указанной комнате с заданным статусом.
       parameters:
       - description: ID комнаты
         in: path
         name: room_id
+        required: true
+        type: string
+      - description: Статус трека (pending, approved, rejected)
+        in: query
+        name: status
         required: true
         type: string
       produces:
@@ -200,15 +316,11 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-      summary: Получить треки в комнате
+      summary: Получить треки в комнате по статусу
       tags:
       - rooms
   /rooms/name/{name}:

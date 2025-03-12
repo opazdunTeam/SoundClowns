@@ -10,7 +10,7 @@ type TrackRepository struct {
 	db *gorm.DB
 }
 
-func NewTrackRepository(db *gorm.DB) *TrackRepository { // Возвращаем интерфейс
+func NewTrackRepository(db *gorm.DB) ITrackRepository { // Возвращаем интерфейс
 	return &TrackRepository{db: db}
 }
 

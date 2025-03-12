@@ -35,12 +35,14 @@ type IRoomRepository interface {
 	// GetTracks возвращает треки по id комнаты
 	GetTracks(roomID uuid.UUID) ([]*models.Track, error)
 
+	GetTracksByStatus(roomID uuid.UUID, status string) ([]*models.Track, error)
+
 	//GetApprovedTracks(roomID uuid.UUID) ([]*models.Track, error)
 	//
 	//GetRejectedTracks(roomID uuid.UUID) ([]*models.Track, error)
 
 	// FindByID находит комнату по её ID.
-	FindByID(id string) (*models.Room, error)
+	FindByID(id uuid.UUID) (*models.Room, error)
 
 	// FindByName находит комнату по её названию.
 	FindByName(name string) (*models.Room, error)
@@ -49,7 +51,16 @@ type IRoomRepository interface {
 	Update(room *models.Room) error
 
 	// Delete удаляет комнату.
-	Delete(id string) error
+	Delete(id uuid.UUID) error
+
+	// JoinRoom позволяет пользователю войти в комнату по паролю.
+	JoinRoom(roomID uuid.UUID, password string) (*models.Room, error)
+
+	// JoinRoomByLink позволяет пользователю войти в комнату по реферальной ссылке.
+	JoinRoomByLink(roomID uuid.UUID) (*models.Room, error)
+
+	// LeaveRoom уменьшает счетчик пользователей в комнате.
+	LeaveRoom(roomID uuid.UUID) error
 
 	//JoinRoom()
 	//LeaveRoom()
