@@ -58,8 +58,12 @@ func main() {
 	r.HandleFunc("/rooms/{id}", roomHandler.GetRoomByID).Methods("GET")
 	r.HandleFunc("/rooms/name/{name}", roomHandler.GetRoomByName).Methods("GET")
 	r.HandleFunc("/rooms/{room_id}/tracks", roomHandler.GetTracks).Methods("GET")
+	r.HandleFunc("/rooms/{room_id}/tracks", roomHandler.GetTracksByStatus).Methods("GET")
 	r.HandleFunc("/rooms", roomHandler.GetRooms).Methods("GET")
 	r.HandleFunc("/rooms/{id}", roomHandler.DeleteRoom).Methods("DELETE")
+	r.HandleFunc("/rooms/{id}/join", roomHandler.JoinRoom).Methods("POST")
+	r.HandleFunc("/rooms/{id}/join-by-link", roomHandler.JoinRoomByLink).Methods("POST")
+	r.HandleFunc("/rooms/{id}/leave", roomHandler.LeaveRoom).Methods("POST")
 
 	// Треки
 	r.HandleFunc("/tracks", trackHandler.CreateTrack).Methods("POST")

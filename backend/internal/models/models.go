@@ -19,7 +19,7 @@ type Room struct {
 	Password   string    `gorm:"type:text;not null" json:"-"`
 	OwnerID    uuid.UUID `gorm:"type:uuid;not null" json:"owner_id"`
 	Owner      User      `gorm:"foreignKey:OwnerID" json:"-"`
-	UsersCount int64     `gorm:"-" json:"users_count"`
+	UsersCount int64     `gorm:"default:0" json:"users_count"`
 	CreatedAt  time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
 }
 

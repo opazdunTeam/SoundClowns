@@ -12,6 +12,10 @@ type CreateRoomRequest struct {
 	OwnerID  string `json:"owner_id"`
 }
 
+type JoinRoomRequest struct {
+	Password string `json:"password" example:"your_password"`
+}
+
 type CreateTrackRequest struct {
 	RoomID    uuid.UUID      `json:"room_id"`
 	UserID    uuid.UUID      `json:"user_id"`

@@ -54,8 +54,12 @@ func (s *RoomService) GetTracks(roomID uuid.UUID) ([]*models.Track, error) {
 	return s.roomRepo.GetTracks(roomID)
 }
 
+func (s *RoomService) GetTracksByStatus(roomID uuid.UUID, status string) ([]*models.Track, error) {
+	return s.roomRepo.GetTracksByStatus(roomID, status)
+}
+
 // FindByID находит комнату по её ID.
-func (s *RoomService) FindByID(id string) (*models.Room, error) {
+func (s *RoomService) FindByID(id uuid.UUID) (*models.Room, error) {
 	return s.roomRepo.FindByID(id)
 }
 
@@ -78,5 +82,26 @@ func (s *RoomService) UpdateTrackStatus(trackID uuid.UUID, status string) error 
 
 // DeleteRoom удаляет комнату.
 func (s *RoomService) DeleteRoom(id uuid.UUID) error {
-	return s.roomRepo.Delete(id.String())
+	return s.roomRepo.Delete(id)
+}
+
+func (s *RoomService) JoinRoom(roomID uuid.UUID, password string) (*models.Room, error) {
+	return s.roomRepo.JoinRoom(roomID, password)
+}
+
+func (s *RoomService) JoinRoomByLink(roomID uuid.UUID) (*models.Room, error) {
+	return s.roomRepo.JoinRoomByLink(roomID)
+}
+
+func (s *RoomService) LeaveRoom(roomID uuid.UUID) (*models.Room, error) {
+	if err := s.roomRepo.LeaveRoom(roomID); err != nil {
+		return nil, err
+	}
+
+	room, err := s.roomRepo.FindByID(roomID)
+	if err != nil {
+		return nil, err
+	}
+
+	return room, nil
 }
