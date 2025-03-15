@@ -98,6 +98,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   data() {
@@ -125,10 +126,51 @@ export default {
           listeners: 184,
           image: 'https://artchive.ru/res/media/img/orig/article/89b/807207.webp'
         }
-      ]
+      ],
+      isAuthenticated: false
+    }
+  },
+  mounted() {
+    this.checkAuthState()
+    
+    const queryParams = this.$route.query
+    if (queryParams.state) {
+      const authData = {
+        state: queryParams.state,
+        code: queryParams.code,
+        cid: queryParams.cid,
+        timestamp: new Date().getTime()
+      }
+      
+      localStorage.setItem('yandexAuth', JSON.stringify(authData))
+      this.isAuthenticated = true
+      this.$router.replace({ path: this.$route.path, query: {} })
     }
   },
   methods: {
+    checkAuthState() {
+      const authData = localStorage.getItem('yandexAuth')
+      this.isAuthenticated = !!authData
+    },
+    loginWithYandex() {
+      const clientId = import.meta.env.VITE_CLIENT_ID
+      const redirectUri = encodeURIComponent(import.meta.env.VITE_YANDEX_REDIRECT_URI)
+      const state = this.generateRandomString()
+      
+      localStorage.setItem('yandexAuthState', state)
+      
+      window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
+    },
+    logout() {
+      localStorage.removeItem('yandexAuth')
+      this.isAuthenticated = false
+      this.$router.push('/')
+    },
+    generateRandomString() {
+      return Array.from(crypto.getRandomValues(new Uint8Array(16)))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('')
+    },
     handleDelete() {
       this.createdRoom = null
     },
@@ -138,7 +180,6 @@ export default {
         id: Date.now(),
         listeners: 0
       }
-      
       this.showModal = false
       this.newRoom = {
         title: '',
@@ -148,11 +189,12 @@ export default {
       }
     },
     handleRoomClick(room) {
-      this.$router.push(`/rooms/${room.id}`);
+      this.$router.push(`/rooms/${room.id}`)
     }
   }
 }
 </script>
+
 
 <style scoped>
 /* Цветовая схема */
